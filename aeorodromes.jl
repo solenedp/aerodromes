@@ -13,9 +13,23 @@ b = [1 for i in 1:n]
 c = [0 for i in 1:n]
 c[d]=1
 c[f]=-1
-@constraint(model,x*b .<=b)
-@constraint(model, transpose(x)*b .<=b)
-@constraint(model,x*b+transpose(x)*b .== c)
+#reecriture
+for i in 1:n
+    @constraint(model,sum(x[i,j] for j in 1:n)<=1)
+    @constraint(model,sum(x[j,i] for j in 1:n)<=1)
+end
+# @constraint(model,x*b+transpose(x)*b .== c)
+#reecriture 
+for i in 1:n 
+    if i == d 
+        @constraint(model,sum(x[i,j] for j in 1:n)-sum(x[j,i] for j in 1:n) == 1)
+    elseif i==f
+        @constraint(model,sum(x[i,j] for j in 1:n)-sum(x[j,i] for j in 1:n) == -1)
+    else 
+        @constraint(model,sum(x[i,j] for j in 1:n)-sum(x[j,i] for j in 1:n) == 0)
+    end
+end
+
 @constraint(model,sum(sum(x[i,j] for j in 1:n) for i in 1:n)>= Amin-1)
 for i in 1:n 
     for j in 1:n 
@@ -26,7 +40,7 @@ for i in 1:n
 end
 
 for i in eachindex(regions) 
-    @constraint(model, sum(sum(x[k,j] for j in 1:n) for k in regions[i] ) == 1)
+    @constraint(model, sum(sum(x[k,j] for j in 1:n) for k in regions[i] ) >= 1)
 end
 for i in 2:n
     for j in 2:n
