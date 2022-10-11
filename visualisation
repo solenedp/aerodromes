@@ -1,0 +1,26 @@
+x_val = JuMP.value.(x)
+
+using Plots
+function visualisation()
+    fig = plot()
+    labels = ["region $i" for i in 1:Nr]
+    for region in 1:Nr
+        x_aerodromes_region = []
+        y_aerodromes_region = []
+        for aerodrome in 1:length(regions[region])
+            push!(x_aerodromes_region,coords[regions[region][aerodrome],1])
+            push!(y_aerodromes_region,coords[regions[region][aerodrome],2])
+        end
+        scatter!(x_aerodromes_region,y_aerodromes_region, label = labels[region])
+    end
+    for i in 1:n
+        for j in 1:n
+            if x_val[i][j] == 1
+                plot!([10,57],[53,8])
+            end
+        end
+    end
+    return fig
+end
+    
+visualisation()
