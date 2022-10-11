@@ -4,6 +4,7 @@ using Plots
 function visualisation()
     fig = plot()
     labels = ["region $i" for i in 1:Nr]
+    scatter!(coords[:,1],coords[:,2], label = "no region")
     for region in 1:Nr
         x_aerodromes_region = []
         y_aerodromes_region = []
@@ -16,7 +17,7 @@ function visualisation()
     for i in 1:n
         for j in 1:n
             if x_val[i][j] == 1
-                plot!([10,57],[53,8])
+                plot!([(coords[i,1],coords[j,1]],[(coords[i,2],coords[j,2]])
             end
         end
     end
